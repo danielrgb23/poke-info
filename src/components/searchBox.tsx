@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { RiSearchLine } from "react-icons/ri";
 
 
-export const InputSearch = () => {
+export const SearchBox = () => {
 
     const searchInputRef = useRef<HTMLInputElement>(null)
 
@@ -31,9 +31,9 @@ export const InputSearch = () => {
                 ref={searchInputRef}
                 placeholder='Pesquisar pokemon'
 
-                fontFamily={'Lato'}
+                fontFamily={'Poppins'}
                 fontWeight={'700'}
-                fontSize={'17px'}
+                fontSize={'15px'}
                 opacity={'.5'}
                 colorScheme='blackAlpha'
             />
