@@ -88,7 +88,6 @@ export const PokeCards = ({ itens }: any) => {
             <CardBody>
                 <Heading
                     display={'flex'}
-                    // size='md' 
                     p='0px 10px'
                     alignItems={'center'}
                     justifyContent={'space-between'}>
