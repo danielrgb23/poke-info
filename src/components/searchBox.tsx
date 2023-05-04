@@ -1,11 +1,35 @@
 import { Flex, Input, Icon } from '@chakra-ui/react'
-import { useRef } from "react";
+import axios from 'axios';
+import { useRef, useState, useEffect } from "react";
 import { RiSearchLine } from "react-icons/ri";
+import { useMyContext } from '../context/Mycontext';
 
+interface Pokemon {
+    name: string;
+    id: number;
+    types: string[];
+}
 
-export const SearchBox = () => {
+export const SearchBox = ({ itens }: any) => {
 
-    const searchInputRef = useRef<HTMLInputElement>(null)
+    const [nomePokemon, setNomePokemon] = useState('')
+    const { value,setValue } = useMyContext();
+
+    // console.log(itens)
+
+    function filterPokemons(itens: Pokemon[], query: string | undefined): Pokemon[] {
+        return itens.filter((pokemon) =>
+            pokemon.name.toLowerCase().includes(query!.toLowerCase())
+        );
+    }
+
+    useEffect(() => {
+        const filteredPokemons = filterPokemons(itens, nomePokemon);
+        // console.log(filteredPokemons)
+        setValue(filteredPokemons)
+    }, [nomePokemon]);
+
+    // console.log('euu',value)
 
     return (
 
@@ -28,7 +52,7 @@ export const SearchBox = () => {
                 variant='unstyled'
                 px='4'
                 mr='4'
-                ref={searchInputRef}
+                onChange={(e) => setNomePokemon(e.target.value)}
                 placeholder='Pesquisar pokemon'
 
                 fontFamily={'Poppins'}

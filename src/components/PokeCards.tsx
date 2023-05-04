@@ -28,14 +28,24 @@ export const PokeCards = ({ itens }: any) => {
     const [opacityValue, setOpacityValue] = useState(0)
 
     const typeColors: any = {
-        "grass": "#78C850",
-        "fire": "#F08030",
-        "water": "#6890F0",
-        "bug": "#A8B820",
-        "flying": "#A890F0",
-        "posion": " #A040A0",
-        "phantom": "#705898",
-        "normal": "#A8A878"
+        'normal': '#A8A77A',
+        'fire': '#EE8130',
+        'water': '#6390F0',
+        'electric': '#F7D02C',
+        'grass': '#7AC74C',
+        'ice': '#96D9D6',
+        'fighting': '#C22E28',
+        'poison': '#A33EA1',
+        'ground': '#E2BF65',
+        'flying': '#A98FF3',
+        'psychic': '#F95587',
+        'bug': '#A6B91A',
+        'rock': '#B6A136',
+        'ghost': '#735797',
+        'dragon': '#6F35FC',
+        'dark': '#705746',
+        'steel': '#B7B7CE',
+        'fairy': '#D685AD',
     }
 
     const verifyColor = () => {
@@ -43,16 +53,16 @@ export const PokeCards = ({ itens }: any) => {
         return typeColors[types || "normal"];
     }
 
-    // console.log('euu',pokemon)
+    // console.log('euu',itens)
 
     useEffect(() => {
         setLoading(true)
         setOpacityValue(0.3) // definir opacidade inicial para o efeito
 
         axios.get(`${itens.url}`)
-            .then((res) => {
+            .then(async (res) => {
                 // console.log(res)
-                const response = res.data;
+                const response = await res.data;
                 const pokemonResponse = {
                     order: response.order,
                     name: response.name,
@@ -65,17 +75,7 @@ export const PokeCards = ({ itens }: any) => {
             }).catch((err) => {
                 setLoading(false)
             })
-    }, [])
-
-    useEffect(() => {
-        if (loading) {
-            // definir a animação de opacidade enquanto carrega
-            const interval = setInterval(() => {
-                setOpacityValue((prev) => prev === 0.25 ? 0.3 : 0.25)
-            }, 500)
-            return () => clearInterval(interval)
-        }
-    }, [loading])
+    }, [itens])
 
     return (
         <Card
@@ -183,7 +183,7 @@ export const PokeCards = ({ itens }: any) => {
                         borderColor={'green'}
                         color={'white'}
                         colorScheme='whatsapp'
-                        >
+                    >
                         Mais
                     </Button>
                 </Flex>
