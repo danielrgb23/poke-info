@@ -1,5 +1,5 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import {  Button, Card, CardBody, CardFooter, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
 import image from '../assets/background/pokeballCard@2x.png'
 import axios from 'axios'

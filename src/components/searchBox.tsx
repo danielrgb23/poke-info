@@ -1,5 +1,4 @@
 import { Flex, Input, Icon } from '@chakra-ui/react'
-import axios from 'axios';
 import { useState, useEffect } from "react";
 import { RiSearchLine } from "react-icons/ri";
 import { useMyContext } from '../context/Mycontext';

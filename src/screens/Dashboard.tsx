@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Box, Text, Button, Flex, Image, Input, InputGroup, Stack, InputLeftElement, InputRightElement, WrapItem, Wrap } from '@chakra-ui/react'
+import { Flex, WrapItem, Wrap } from '@chakra-ui/react'
 import axios from 'axios'
 
 import { SearchBox } from '../components/searchBox'
@@ -17,6 +17,7 @@ export const Dashboard = () => {
       .then((res) => {
         setPokemons(res.data.results)
       }).catch((err) => {
+        console.log(err)
       })
   }, [])
 
