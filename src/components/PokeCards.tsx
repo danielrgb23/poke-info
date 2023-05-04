@@ -1,7 +1,7 @@
 import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 
-import image from '../assets/background/pokeballCard.png'
+import image from '../assets/background/pokeballCard@2x.png'
 import axios from 'axios'
 
 interface ItypesPokemon {
@@ -51,7 +51,7 @@ export const PokeCards = ({ itens }: any) => {
 
         axios.get(`${itens.url}`)
             .then((res) => {
-                console.log(res)
+                // console.log(res)
                 const response = res.data;
                 const pokemonResponse = {
                     order: response.order,
@@ -78,7 +78,13 @@ export const PokeCards = ({ itens }: any) => {
     }, [loading])
 
     return (
-        <Card>
+        <Card
+            bg={verifyColor()}
+            bgImage={image}
+            bgRepeat={'no-repeat'}
+            bgSize={'15em'}
+            bgPosition={'top right'}
+        >
             <CardBody>
                 <Heading
                     display={'flex'}
@@ -101,17 +107,12 @@ export const PokeCards = ({ itens }: any) => {
                     > &nbsp;{pokemon?.name}</Text>
                 </Heading>
                 <Flex
-                    bg={verifyColor()}
                     boxShadow={'base'}
                     borderRadius={'3em'}
                     p='0px 15px'
                     mt='5px'
                     w='100%'
                     h='60%'
-                    bgImage={image}
-                    bgRepeat={'no-repeat'}
-                    bgSize={'10em'}
-                    bgPosition={'top right'}
                     justifyContent={'center'}>
                     <Image
                         src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`}
@@ -135,7 +136,7 @@ export const PokeCards = ({ itens }: any) => {
                                     borderRadius={'10px'}
                                     // w='100%'
                                     p='0px 10px'
-                                    bg='#78C850'
+                                    bg='green'
                                     alignItems={'center'}
                                     justifyContent={'center'}
 
@@ -178,8 +179,11 @@ export const PokeCards = ({ itens }: any) => {
                     w='100%'>
                     <Button
                         w='40%'
-                        variant='outline'
-                        colorScheme='green'>
+                        variant='solid'
+                        borderColor={'green'}
+                        color={'white'}
+                        colorScheme='whatsapp'
+                        >
                         Mais
                     </Button>
                 </Flex>
