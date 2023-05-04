@@ -53,7 +53,6 @@ export const PokeCards = ({ itens }: any) => {
         return typeColors[types || "normal"];
     }
 
-    // console.log('euu',itens)
 
     useEffect(() => {
         setLoading(true)

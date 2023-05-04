@@ -9,19 +9,25 @@ import { useMyContext } from '../context/Mycontext'
 export const Dashboard = () => {
 
   const [pokemons, setPokemons] = useState([])
-
+  const [isTop, setIsTop] = useState(true);
   const { value } = useMyContext();
 
   useEffect(() => {
-    axios.get("https://pokeapi.co/api/v2/pokemon/?offset=60&limit=60")
+    axios.get("https://pokeapi.co/api/v2/pokemon/?offset=100&limit=100")
       .then((res) => {
         setPokemons(res.data.results)
       }).catch((err) => {
-        // console.log(err)
       })
   }, [])
 
-  // console.log(value)
+  useEffect(() => {
+    document.addEventListener("scroll", () => {
+      const top = window.scrollY < 40;
+      if (top !== isTop) {
+        setIsTop(top);
+      }
+    });
+  }, [isTop]);
 
   if (value?.length != 0) {
     return (
@@ -30,10 +36,14 @@ export const Dashboard = () => {
         h='100vh'
         flexDir={'column'} >
         <Flex
+          position="fixed"
+          zIndex="999"
+          top='0px'
+          bg={isTop ? "white" : "white"}
+          transition="background-color 0.2s"
           justifyContent={'center'}
           w='100%'
-          h='4%'
-          m='3em 0px'>
+          h='10%'>
           <SearchBox itens={pokemons} />
         </Flex>
 
@@ -41,6 +51,7 @@ export const Dashboard = () => {
           p='20px 20px'
           w='100%'
           justifyContent={'center'}
+          mt='10em'
         >
           <Wrap w='100%' spacing='50px'>
             {

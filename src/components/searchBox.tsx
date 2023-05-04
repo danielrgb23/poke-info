@@ -1,6 +1,6 @@
 import { Flex, Input, Icon } from '@chakra-ui/react'
 import axios from 'axios';
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RiSearchLine } from "react-icons/ri";
 import { useMyContext } from '../context/Mycontext';
 
@@ -13,9 +13,8 @@ interface Pokemon {
 export const SearchBox = ({ itens }: any) => {
 
     const [nomePokemon, setNomePokemon] = useState('')
-    const { value,setValue } = useMyContext();
+    const { setValue } = useMyContext();
 
-    // console.log(itens)
 
     function filterPokemons(itens: Pokemon[], query: string | undefined): Pokemon[] {
         return itens.filter((pokemon) =>
@@ -25,11 +24,8 @@ export const SearchBox = ({ itens }: any) => {
 
     useEffect(() => {
         const filteredPokemons = filterPokemons(itens, nomePokemon);
-        // console.log(filteredPokemons)
         setValue(filteredPokemons)
     }, [nomePokemon]);
-
-    // console.log('euu',value)
 
     return (
 
@@ -48,6 +44,7 @@ export const SearchBox = ({ itens }: any) => {
         >
 
             <Input
+                id='input'
                 type='text'
                 variant='unstyled'
                 px='4'
