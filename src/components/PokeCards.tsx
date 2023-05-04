@@ -24,8 +24,8 @@ interface IPokemonResponse {
 export const PokeCards = ({ itens }: any) => {
 
     const [pokemon, setPokemon] = useState<IPokemonResponse>()
-    const [loading, setLoading] = useState(false)
-    const [opacityValue, setOpacityValue] = useState(0)
+    // const [loading, setLoading] = useState(false)
+    // const [opacityValue, setOpacityValue] = useState(0)
 
     const typeColors: any = {
         'normal': '#A8A77A',
@@ -55,8 +55,8 @@ export const PokeCards = ({ itens }: any) => {
 
 
     useEffect(() => {
-        setLoading(true)
-        setOpacityValue(0.3) // definir opacidade inicial para o efeito
+        // setLoading(true)
+        // setOpacityValue(0.3) // definir opacidade inicial para o efeito
 
         axios.get(`${itens.url}`)
             .then(async (res) => {
@@ -69,10 +69,11 @@ export const PokeCards = ({ itens }: any) => {
                     id: response.id,
                     weight: response.weight
                 }
-                setLoading(false)
+                // setLoading(false)
                 setPokemon(pokemonResponse)
             }).catch((err) => {
-                setLoading(false)
+                console.log(err)
+                // setLoading(false)
             })
     }, [itens])
 
