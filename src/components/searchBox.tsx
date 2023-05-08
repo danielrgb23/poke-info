@@ -1,30 +1,42 @@
-import { Flex, Input, Icon } from '@chakra-ui/react'
-import { useState, useEffect } from "react";
-import { RiSearchLine } from "react-icons/ri";
+import { Box, Flex, Icon, Input, Text } from '@chakra-ui/react';
+import { RiSearchLine } from 'react-icons/ri'
+import { useState } from 'react';
+import axios from 'axios';
 import { useMyContext } from '../context/Mycontext';
 
 interface Pokemon {
     name: string;
-    id: number;
-    types: string[];
+    url: string;
 }
 
-export const SearchBox = ({ itens }: any) => {
+interface PokemonSearchProps {
+    onSearch: (searchQuery: string) => void;
+}
 
-    const [nomePokemon, setNomePokemon] = useState('')
-    const { setValue } = useMyContext();
+export const PokemonSearch = ({ onSearch }: PokemonSearchProps) => {
+    const { setValue } = useMyContext()
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState<Pokemon[]>([]);
 
+    const handleSearchChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const query = event.target.value.toLowerCase();
+        setSearchQuery(query);
 
-    function filterPokemons(itens: Pokemon[], query: string | undefined): Pokemon[] {
-        return itens.filter((pokemon) =>
-            pokemon.name.toLowerCase().includes(query!.toLowerCase())
-        );
-    }
+        onSearch(query)
 
-    useEffect(() => {
-        const filteredPokemons = filterPokemons(itens, nomePokemon);
-        setValue(filteredPokemons)
-    }, [nomePokemon]);
+        try {
+            const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${query}`);
+            const pokemonData: Pokemon = {
+                name: response.data.forms[0].name,
+                url: response.data.forms[0].url,
+            };
+            setSearchResults([pokemonData]);
+            setValue([pokemonData]);
+        } catch (error) {
+            console.log(error);
+            setSearchResults([]);
+        }
+    };
 
     return (
 
@@ -48,7 +60,8 @@ export const SearchBox = ({ itens }: any) => {
                 variant='unstyled'
                 px='4'
                 mr='4'
-                onChange={(e) => setNomePokemon(e.target.value)}
+                value={searchQuery}
+                onChange={handleSearchChange}
                 placeholder='Pesquisar pokemon'
 
                 fontFamily={'Poppins'}
@@ -60,7 +73,6 @@ export const SearchBox = ({ itens }: any) => {
 
             <Icon as={RiSearchLine} opacity={.5} fontSize='20' />
         </Flex>
+    );
+};
 
-
-    )
-}

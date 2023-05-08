@@ -3,8 +3,7 @@ import { createContext, useState, useContext } from 'react';
 
 interface Pokemon {
     name: string;
-    id: number;
-    types: string[];
+    url: string;
 }
 
 type MyContextType = {

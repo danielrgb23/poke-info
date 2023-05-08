@@ -1,81 +1,93 @@
-import {  Button, Card, CardBody, CardFooter, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-
+import { Button, Card, CardBody, CardFooter, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import image from '../assets/background/pokeballCard@2x.png'
-import axios from 'axios'
+import axios from 'axios';
 
 interface ItypesPokemon {
-    name: string
-    url: string
+    name: string;
+    url: string;
 }
 
 interface ItypePokemon {
-    type: ItypesPokemon
+    type: ItypesPokemon;
 }
 
 interface IPokemonResponse {
-    order: number,
-    name: string,
-    types: ItypePokemon[],
-    id: number,
-    weight: number
+    order: number;
+    name: string;
+    types: ItypePokemon[];
+    id: number;
+    weight: number;
 }
 
-export const PokeCards = ({ itens }: any) => {
+interface PokeCardsProps {
+    itens: {
+        name: string;
+        url: string;
+    };
+    searchValue: any;
+}
 
-    const [pokemon, setPokemon] = useState<IPokemonResponse>()
-    // const [loading, setLoading] = useState(false)
-    // const [opacityValue, setOpacityValue] = useState(0)
+export const PokeCards = ({ itens, searchValue }: PokeCardsProps) => {
+    const [pokemon, setPokemon] = useState<IPokemonResponse>();
 
     const typeColors: any = {
-        'normal': '#A8A77A',
-        'fire': '#EE8130',
-        'water': '#6390F0',
-        'electric': '#F7D02C',
-        'grass': '#7AC74C',
-        'ice': '#96D9D6',
-        'fighting': '#C22E28',
-        'poison': '#A33EA1',
-        'ground': '#E2BF65',
-        'flying': '#A98FF3',
-        'psychic': '#F95587',
-        'bug': '#A6B91A',
-        'rock': '#B6A136',
-        'ghost': '#735797',
-        'dragon': '#6F35FC',
-        'dark': '#705746',
-        'steel': '#B7B7CE',
-        'fairy': '#D685AD',
-    }
+        normal: '#A8A77A',
+        fire: '#EE8130',
+        water: '#6390F0',
+        electric: '#F7D02C',
+        grass: '#7AC74C',
+        ice: '#96D9D6',
+        fighting: '#C22E28',
+        poison: '#A33EA1',
+        ground: '#E2BF65',
+        flying: '#A98FF3',
+        psychic: '#F95587',
+        bug: '#A6B91A',
+        rock: '#B6A136',
+        ghost: '#735797',
+        dragon: '#6F35FC',
+        dark: '#705746',
+        steel: '#B7B7CE',
+        fairy: '#D685AD',
+    };
 
     const verifyColor = () => {
-        const types = pokemon!?.types.length > 0 ? pokemon?.types[0].type.name : null
-        return typeColors[types || "normal"];
-    }
-
+        const types = pokemon?.types.length > 0 ? pokemon?.types[0].type.name : null;
+        return typeColors[types || 'normal'];
+    };
 
     useEffect(() => {
-        // setLoading(true)
-        // setOpacityValue(0.3) // definir opacidade inicial para o efeito
-
-        axios.get(`${itens.url}`)
+        axios
+            .get(`${itens.url}`)
             .then(async (res) => {
-                // console.log(res)
                 const response = await res.data;
                 const pokemonResponse = {
                     order: response.order,
                     name: response.name,
                     types: response.types,
                     id: response.id,
-                    weight: response.weight
-                }
-                // setLoading(false)
-                setPokemon(pokemonResponse)
-            }).catch((err) => {
-                console.log(err)
-                // setLoading(false)
+                    weight: response.weight,
+                };
+                setPokemon(pokemonResponse);
             })
-    }, [itens])
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [itens, searchValue]);
+
+    const shouldDisplayPokemon = () => {
+        if (!searchValue) {
+            return true; // Display the Pokemon if there's no search value
+        }
+
+        // Display the Pokemon if its name matches the search value
+        return pokemon?.name.toLowerCase();
+    };
+
+    if (!shouldDisplayPokemon()) {
+        return null; // Don't render anything if the Pokemon should not be displayed
+    }
 
     return (
         <Card
@@ -189,4 +201,5 @@ export const PokeCards = ({ itens }: any) => {
             </CardFooter>
         </Card>
     )
+
 }
