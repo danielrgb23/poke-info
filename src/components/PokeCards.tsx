@@ -1,188 +1,208 @@
-import { Button, Card, CardBody, CardFooter, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Button, Card, CardBody, CardFooter, Flex, Heading, Image, Spinner, Stack, Text } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+
 import image from '../assets/background/pokeballCard@2x.png'
-import axios from 'axios';
+import axios from 'axios'
 
 interface ItypesPokemon {
-    name: string;
-    url: string;
+    name: string
+    url: string
 }
 
 interface ItypePokemon {
-    type: ItypesPokemon;
+    type: ItypesPokemon
 }
 
 interface IPokemonResponse {
-    order: number;
-    name: string;
-    types: ItypePokemon[];
-    id: number;
-    weight: number;
+    order: number,
+    name: string,
+    types: ItypePokemon[],
+    id: number,
+    weight: number
 }
 
-interface PokeCardsProps {
-    itens: {
-        name: string;
-        url: string;
-    };
-    searchValue: any;
-}
+export const PokeCards = ({ itens }: any) => {
 
-export const PokeCards = ({ itens, searchValue }: PokeCardsProps) => {
-    const [pokemon, setPokemon] = useState<IPokemonResponse>();
+    const [pokemon, setPokemon] = useState<IPokemonResponse>()
+    const [loading, setLoading] = useState(false)
+    // const [opacityValue, setOpacityValue] = useState(0)
 
     const typeColors: any = {
-        normal: '#A8A77A',
-        fire: '#EE8130',
-        water: '#6390F0',
-        electric: '#F7D02C',
-        grass: '#7AC74C',
-        ice: '#96D9D6',
-        fighting: '#C22E28',
-        poison: '#A33EA1',
-        ground: '#E2BF65',
-        flying: '#A98FF3',
-        psychic: '#F95587',
-        bug: '#A6B91A',
-        rock: '#B6A136',
-        ghost: '#735797',
-        dragon: '#6F35FC',
-        dark: '#705746',
-        steel: '#B7B7CE',
-        fairy: '#D685AD',
-    };
+        'normal': '#A8A77A',
+        'fire': '#EE8130',
+        'water': '#6390F0',
+        'electric': '#F7D02C',
+        'grass': '#7AC74C',
+        'ice': '#96D9D6',
+        'fighting': '#C22E28',
+        'poison': '#A33EA1',
+        'ground': '#E2BF65',
+        'flying': '#A98FF3',
+        'psychic': '#F95587',
+        'bug': '#A6B91A',
+        'rock': '#B6A136',
+        'ghost': '#735797',
+        'dragon': '#6F35FC',
+        'dark': '#705746',
+        'steel': '#B7B7CE',
+        'fairy': '#D685AD',
+    }
 
     const verifyColor = () => {
-        const types = pokemon?.types.length > 0 ? pokemon?.types[0].type.name : null;
-        return typeColors[types || 'normal'];
-    };
+        const types = pokemon!?.types.length > 0 ? pokemon?.types[0].type.name : null
+        return typeColors[types || "normal"];
+    }
 
     useEffect(() => {
-        axios
-            .get(`${itens.url}`)
+        setLoading(true)
+        // setOpacityValue(0.3) // definir opacidade inicial para o efeito
+
+        axios.get(`${itens.url}`)
             .then(async (res) => {
+                // console.log(res)
                 const response = await res.data;
                 const pokemonResponse = {
                     order: response.order,
                     name: response.name,
                     types: response.types,
                     id: response.id,
-                    weight: response.weight,
-                };
-                setPokemon(pokemonResponse);
+                    weight: response.weight
+                }
+                setTimeout(() => {
+                    setLoading(false)
+                    setPokemon(pokemonResponse)
+                }, 1000);
+            }).catch((err) => {
+                console.log(err)
+                setLoading(false)
             })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [itens, searchValue]);
-
-    const shouldDisplayPokemon = () => {
-        if (!searchValue) {
-            return true; // Display the Pokemon if there's no search value
-        }
-
-        // Display the Pokemon if its name matches the search value
-        return pokemon?.name.toLowerCase();
-    };
-
-    if (!shouldDisplayPokemon()) {
-        return null; // Don't render anything if the Pokemon should not be displayed
-    }
+    }, [itens])
 
     return (
         <Card
-            bg={verifyColor()}
+            bg={loading ? 'gray.500' : verifyColor()}
             bgImage={image}
             bgRepeat={'no-repeat'}
             bgSize={'15em'}
             bgPosition={'top right'}
         >
             <CardBody>
-                <Heading
-                    display={'flex'}
-                    p='0px 10px'
-                    alignItems={'center'}
-                    justifyContent={'space-between'}>
-                    <Text
-                        fontFamily={'Poppins'}
-                        fontWeight={'500'}
-                        fontSize={'17px'}
-                        // opacity={'.5'}
-                        colorScheme='blackAlpha'
-                    >#{pokemon?.order}</Text>
-                    <Text
-                        fontFamily={'Poppins'}
-                        fontWeight={'700'}
-                        fontSize={'20px'}
-                        colorScheme='blackAlpha'
-                    > &nbsp;{pokemon?.name}</Text>
-                </Heading>
-                <Flex
-                    boxShadow={'base'}
-                    borderRadius={'3em'}
-                    p='0px 15px'
-                    mt='5px'
-                    w='100%'
-                    h='60%'
+                {loading ? <Flex
                     justifyContent={'center'}>
-                    <Image
-                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`}
-                        alt='Green double couch with wooden legs'
-                        borderRadius='lg'
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='gray.500'
+                        size='md'
                     />
                 </Flex>
-
-                <Stack mt='6' spacing='3'>
-                    <Flex
+                    : <Heading
+                        display={'flex'}
+                        p='0px 10px'
                         alignItems={'center'}
-                        justifyContent={'space-around'}
-                        flexDir={'row'}
-                        // gap='8px'
-                        w='100%'>
-                        {
-                            pokemon?.types?.map(({ type, index }: any) => (
-                                <Text
-                                    key={index}
-                                    display={'flex'}
-                                    borderRadius={'10px'}
-                                    // w='100%'
-                                    p='0px 10px'
-                                    bg='green'
-                                    alignItems={'center'}
-                                    justifyContent={'center'}
-
-                                    color={'white'}
-                                    fontFamily={'Poppins'}
-                                    fontWeight={'400'}
-                                    fontSize={'14px'}>
-                                    {type.name}
-                                </Text>
-                            ))
-                        }
-                    </Flex>
-                    <Flex
-                        alignItems={'center'}
-                        justifyContent={'space-around'}
-                        flexDir={'row'}
-                        // gap='8px'
-                        w='100%'>
+                        justifyContent={'space-between'}>
                         <Text
-                            display={'flex'}
-                            borderRadius={'10px'}
-                            // w='100%'
-                            p='0px 10px'
-                            bg='green'
-                            alignItems={'center'}
-                            justifyContent={'center'}
-
-                            color={'white'}
                             fontFamily={'Poppins'}
-                            fontWeight={'400'}
-                            fontSize={'14px'}>
-                            {pokemon?.weight}Kg
-                        </Text>
-                    </Flex>
-                </Stack>
+                            fontWeight={'500'}
+                            fontSize={'17px'}
+                            // opacity={'.5'}
+                            colorScheme='blackAlpha'
+                        >#{pokemon?.order}</Text>
+                        <Text
+                            fontFamily={'Poppins'}
+                            fontWeight={'700'}
+                            fontSize={'20px'}
+                            colorScheme='blackAlpha'
+                        > &nbsp;{pokemon?.name}</Text>
+                    </Heading>}
+                {loading ? <Flex
+                    mt='3em'
+                    justifyContent={'center'}>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='gray.500'
+                        size='xl'
+                    />
+                </Flex>
+                    : <Flex
+                        boxShadow={'base'}
+                        borderRadius={'3em'}
+                        p='0px 15px'
+                        mt='5px'
+                        w='100%'
+                        h='60%'
+                        justifyContent={'center'}>
+                        <Image
+                            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`}
+                            alt='Green double couch with wooden legs'
+                            borderRadius='lg'
+                        />
+                    </Flex>}
+
+                {loading ? <Flex
+                    justifyContent={'center'} mt='3em'>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='gray.500'
+                        size='lg'
+                    />
+                </Flex>
+                    : <Stack mt='6' spacing='3'>
+                        <Flex
+                            alignItems={'center'}
+                            justifyContent={'space-around'}
+                            flexDir={'row'}
+                            // gap='8px'
+                            w='100%'>
+                            {
+                                pokemon?.types?.map(({ type, index }: any) => (
+                                    <Text
+                                        key={index}
+                                        display={'flex'}
+                                        borderRadius={'10px'}
+                                        // w='100%'
+                                        p='0px 10px'
+                                        bg='green'
+                                        alignItems={'center'}
+                                        justifyContent={'center'}
+
+                                        color={'white'}
+                                        fontFamily={'Poppins'}
+                                        fontWeight={'400'}
+                                        fontSize={'14px'}>
+                                        {type.name}
+                                    </Text>
+                                ))
+                            }
+                        </Flex>
+                        <Flex
+                            alignItems={'center'}
+                            justifyContent={'space-around'}
+                            flexDir={'row'}
+                            // gap='8px'
+                            w='100%'>
+                            <Text
+                                display={'flex'}
+                                borderRadius={'10px'}
+                                // w='100%'
+                                p='0px 10px'
+                                bg='green'
+                                alignItems={'center'}
+                                justifyContent={'center'}
+
+                                color={'white'}
+                                fontFamily={'Poppins'}
+                                fontWeight={'400'}
+                                fontSize={'14px'}>
+                                {pokemon?.weight}Kg
+                            </Text>
+                        </Flex>
+                    </Stack>}
             </CardBody>
             <CardFooter>
                 <Flex
@@ -201,5 +221,4 @@ export const PokeCards = ({ itens, searchValue }: PokeCardsProps) => {
             </CardFooter>
         </Card>
     )
-
 }

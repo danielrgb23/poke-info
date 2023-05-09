@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Input, Text } from '@chakra-ui/react';
+import { Flex, Icon, Input } from '@chakra-ui/react';
 import { RiSearchLine } from 'react-icons/ri'
 import { useState } from 'react';
 import axios from 'axios';
@@ -16,7 +16,6 @@ interface PokemonSearchProps {
 export const PokemonSearch = ({ onSearch }: PokemonSearchProps) => {
     const { setValue } = useMyContext()
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState<Pokemon[]>([]);
 
     const handleSearchChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const query = event.target.value.toLowerCase();
@@ -30,11 +29,9 @@ export const PokemonSearch = ({ onSearch }: PokemonSearchProps) => {
                 name: response.data.forms[0].name,
                 url: response.data.forms[0].url,
             };
-            setSearchResults([pokemonData]);
             setValue([pokemonData]);
         } catch (error) {
             console.log(error);
-            setSearchResults([]);
         }
     };
 

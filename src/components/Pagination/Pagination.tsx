@@ -21,30 +21,44 @@ interface PokemonResponse {
 export const Pagination = () => {
     const [pokemonData, setPokemonData] = useState<PokemonResponse | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const { value } = useMyContext();
-    const [searchQuery, setSearchQuery] = useState(''); // Adicione um estado para o valor da pesquisa
+    const { value, setValue } = useMyContext();
+    const [searchQuery, setSearchQuery] = useState('');
 
-    // console.log(value)
 
     const fetchPokemons = async (url: string) => {
         try {
-            const response = await axios.get<PokemonResponse>(url);
-            setPokemonData(response.data);
+            if (value && value[0].url === url) {
+                setPokemonData({
+                    count: 1,
+                    next: null,
+                    previous: null,
+                    results: [value[0]]
+                });
+            } else {
+                const response = await axios.get<PokemonResponse>(url);
+                setPokemonData(response.data);
+            }
         } catch (error) {
             console.log(error);
         }
     };
 
-    console.log(searchQuery)
-
     const handleSearch = (query: string) => {
         setSearchQuery(query);
-        // setPokemonData(searchQuery[0]?.name)
     };
 
     useEffect(() => {
-        fetchPokemons(`https://pokeapi.co/api/v2/pokemon?offset=${(currentPage - 1) * 20}&limit=20`);
-    }, [currentPage]);
+        if (value) {
+            fetchPokemons(value[0].url);
+        } else {
+            fetchPokemons(`https://pokeapi.co/api/v2/pokemon?offset=${(currentPage - 1) * 20}&limit=20`);
+        }
+    }, [currentPage, value, searchQuery]);
+
+    useEffect(() => {
+        // @ts-ignore ou // @ts-expect-error 
+        setValue(null);
+    }, [searchQuery]);
 
     const goToPreviousPage = () => {
         if (pokemonData?.previous) {
@@ -58,10 +72,9 @@ export const Pagination = () => {
         }
     };
 
-    // Restante do código
     return (
-        <Box>
-            <PokemonSearch onSearch={handleSearch} /> {/* Adicione o componente PokemonSearch e passe a função handleSearch */}
+        <Box display={'flex'} justifyContent={'center'} flexDir={'column'} gap='3em'>
+            <PokemonSearch onSearch={handleSearch} />
             <Box>
                 {pokemonData && (
                     <Flex justifyContent="center" alignItems="center">
@@ -83,12 +96,11 @@ export const Pagination = () => {
                     <Box mt={4}>
                         <Wrap w='100%' spacing='50px'>
                             {
-                                pokemonData.results.map((pokemon) => {
+                                pokemonData?.results?.map((pokemon) => {
                                     return (
                                         <WrapItem w='250px' h='420px'>
                                             <PokeCards
                                                 itens={pokemon}
-                                                searchValue={value}
                                             />
                                         </WrapItem>
                                     )
