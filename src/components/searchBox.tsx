@@ -27,8 +27,9 @@ export const PokemonSearch = ({ onSearch }: PokemonSearchProps) => {
             const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${query}`);
             const pokemonData: Pokemon = {
                 name: response.data.forms[0].name,
-                url: response.data.forms[0].url,
+                url: `https://pokeapi.co/api/v2/pokemon/${query}`,
             };
+            console.log(response);
             setValue([pokemonData]);
         } catch (error) {
             console.log(error);
