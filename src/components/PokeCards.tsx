@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardFooter, Flex, FormControl, FormLabel, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text, Wrap, WrapItem, useDisclosure } from '@chakra-ui/react'
+import { Button, Card, CardBody, CardFooter, Flex, FormControl, FormLabel, Heading, Image, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text, Wrap, WrapItem, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import image from '../assets/background/pokeballCard@2x.png'
@@ -228,7 +228,7 @@ export const PokeCards = ({ itens }: any) => {
                             color={'white'}
                             colorScheme='whatsapp'
                         >
-                            Mais
+                            More
                         </Button>
                     </Flex>
                 </CardFooter>
@@ -399,7 +399,9 @@ export const PokeCards = ({ itens }: any) => {
                         <Button colorScheme='blue' mr={3} onClick={onClose}>
                             Close
                         </Button>
-                        <Button variant='ghost'>Meu Linkedin</Button>
+                        <Button variant='ghost' colorScheme='none' color='white'>
+                            <Link textDecoration={'none'} target='_blank' href='https://www.linkedin.com/in/daniel-augusto02/'> Meu Linkedin</Link>
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal >

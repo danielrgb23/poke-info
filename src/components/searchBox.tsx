@@ -60,7 +60,7 @@ export const PokemonSearch = ({ onSearch }: PokemonSearchProps) => {
                 mr='4'
                 value={searchQuery}
                 onChange={handleSearchChange}
-                placeholder='Pesquisar pokemon'
+                placeholder='Search pokemon'
 
                 fontFamily={'Poppins'}
                 fontWeight={'700'}
